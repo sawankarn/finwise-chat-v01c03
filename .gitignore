@@ -1,0 +1,31 @@
+# Target — build output
+target/
+*.class
+
+# Maven wrapper
+.mvn/wrapper/maven-wrapper.jar
+
+# IDE files
+.idea/
+*.iml
+*.iws
+.project
+.classpath
+.settings/
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# ============================================================
+# CRITICAL: Never commit API keys!
+# ============================================================
+.env
+*.env
+application-secrets.yml
+application-production.yml
+
+# But DO commit:
+# application.yml          ← default config (no secrets)
+# application-local.yml    ← local dev config (no secrets)

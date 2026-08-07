@@ -1,0 +1,107 @@
+# =============================================================================
+# FinWise Chat — Main Application Configuration
+# Volume 1, Chapter 2
+# =============================================================================
+# Active profile: DEFAULT (OpenAI)
+# Switch to local profile for Ollama: --spring.profiles.active=local
+# =============================================================================
+
+spring:
+
+  application:
+    name: finwise-chat-v01c02
+
+  # ---------------------------------------------------------------------------
+  # Spring AI — Gemini via OpenAI Configuration (default profile)
+  # ---------------------------------------------------------------------------
+  ai:
+    # In Spring AI 1.0.0+, when multiple model starters are on the classpath,
+    # you MUST explicitly declare which one is active.
+    model:
+      chat: openai
+      embedding: openai
+
+    # Use the OpenAI starter, but point it to Google's Gemini API
+    # Google natively supports the OpenAI protocol at this endpoint.
+    openai:
+      # SECURITY: Never hardcode API keys.
+      # Set via environment variable: export GEMINI_API_KEY=AIza...
+      api-key: ${GEMINI_API_KEY:your-gemini-api-key-here}
+      base-url: "https://generativelanguage.googleapis.com/v1beta/openai/"
+
+      chat:
+        options:
+          # Model selection guide:
+          # gemini-3.5-flash-lite    → Fast, free tier available
+          # gemini-1.5-pro      → High reasoning
+          model: gemini-3.5-flash-lite
+
+          # Temperature (0.0–2.0):
+          # FinWise uses 0.3 — financial advice needs consistency
+          temperature: 0.3
+          
+          # Maximum output tokens (cost/latency control)
+          max-tokens: 1000
+
+      # Embedding model (used from Chapter 11 — RAG)
+      embedding:
+        options:
+          model: text-embedding-004
+
+# =============================================================================
+# SERVER CONFIGURATION
+# =============================================================================
+server:
+  port: 8080
+  # Graceful shutdown — waits for in-flight LLM calls to complete
+  shutdown: graceful
+
+# =============================================================================
+# SPRING BOOT ACTUATOR — Health, Metrics, Info
+# =============================================================================
+management:
+  endpoints:
+    web:
+      exposure:
+        # Expose: health (for K8s probes), metrics, info
+        # In production, restrict to health only and use internal network
+        include: health,metrics,info,env
+  endpoint:
+    health:
+      # "always" shows full health details (useful in development)
+      # Use "when-authorized" in production
+      show-details: always
+
+# =============================================================================
+# LOGGING
+# =============================================================================
+logging:
+  level:
+    root: INFO
+
+    # Spring AI — set to DEBUG to see all prompts/responses (development only!)
+    # WARNING: This will log user messages — never use in production
+    org.springframework.ai: INFO
+
+    # FinWise application logs
+    com.finwise: DEBUG
+
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+
+finwise:
+  model-tiers:
+    - name: "primary-gemini"
+      provider: "gemini"
+      label: "Primary (Gemini)"
+    - name: "openrouter-free-1"
+      provider: "openrouter"
+      model: "openai/gpt-oss-20b:free"
+      label: "Free Fallback 1 (OpenRouter)"
+    - name: "openrouter-free-2"
+      provider: "openrouter"
+      model: "google/gemma-4-31b-it:free"
+      label: "Free Fallback 2 (OpenRouter)"
+    - name: "ollama-local"
+      provider: "ollama"
+      label: "Local Fallback (Ollama)"

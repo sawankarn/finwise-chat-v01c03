@@ -1,0 +1,53 @@
+# =============================================================================
+# FinWise Chat — LOCAL Profile Configuration (Ollama)
+# Volume 1, Chapter 1
+# =============================================================================
+# Activate with: --spring.profiles.active=local
+# or:            -Dspring.profiles.active=local
+# or:            SPRING_PROFILES_ACTIVE=local
+# =============================================================================
+# Prerequisites:
+#   1. Install Ollama:  brew install ollama  (macOS)
+#                       https://ollama.ai/download  (Windows/Linux)
+#   2. Pull a model:    ollama pull llama3.2
+#   3. Start Ollama:    ollama serve
+#   4. Verify:          curl http://localhost:11434/api/tags
+# =============================================================================
+
+spring:
+  ai:
+    # Explicitly activate Ollama in the local profile
+    model:
+      chat: ollama
+      embedding: ollama
+    # Enable Ollama for local development
+    ollama:
+      # Default Ollama URL — change if running on a different port
+      base-url: http://localhost:11434
+
+      chat:
+        options:
+          # Recommended models for Chapter 1 (balance of speed + quality):
+          # llama3.2     → Best overall for chat (3.2B params, fast)
+          # mistral      → Good alternative, strong reasoning
+          # gemma2:2b    → Fastest, good for development iteration
+          # phi3         → Excellent for constrained hardware
+          model: llama3.2
+
+          # Same temperature as production for consistent behaviour testing
+          temperature: 0.3
+
+      # Embedding model for RAG chapters (Volume 2)
+      embedding:
+        options:
+          model: nomic-embed-text
+
+# =============================================================================
+# LOGGING — More verbose in local mode for learning
+# =============================================================================
+logging:
+  level:
+    # Show ALL Spring AI prompts/responses locally — great for learning!
+    # You'll see exactly what's being sent to the LLM and what comes back.
+    org.springframework.ai: DEBUG
+    com.finwise: DEBUG
