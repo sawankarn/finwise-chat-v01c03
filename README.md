@@ -1,4 +1,4 @@
-# 📗 Volume 1 · Chapter 3: Making Sense of Intelligence: Output & Evaluation
+﻿# 📗 Volume 1 · Chapter 3: Making Sense of Intelligence: Output & Evaluation
 
 # FinWise Chat
 
@@ -200,4 +200,19 @@ curl "http://localhost:8080/api/chat/summary?concept=inflation"
 
 ---
 
-_Previous: [Chapter 2 — Talking to Intelligence: Prompts & Models](../../chapter2/finwise-chat-v01c02/README.md)_
+## Next Chapter
+
+Continue your journey with the next project in the series:
+
+| | Details |
+|---|---|
+| **Chapter**    | Chapter 4: Java 21 - The AI-Ready Foundation |
+| **GitHub**     | [https://github.com/sawankarn/finwise-chat-v01c04](https://github.com/sawankarn/finwise-chat-v01c04) |
+| **Repository** | finwise-chat-v01c04 |
+
+Clone and get started:
+
+    git clone https://github.com/sawankarn/finwise-chat-v01c04.git
+    cd finwise-chat-v01c04
+
+> Keep building - each chapter unlocks new AI superpowers for your FinWise app!
